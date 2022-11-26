@@ -6,6 +6,7 @@ import axios from "axios"
 import store from "../store"
 import { useDispatch } from 'react-redux'
 import authSlice from "../store/slices/auth"
+import { useNavigate } from "react-router-dom"
 
 export const SignInUp = () => {
     const [signType, setSignType] = useState('signUp')
@@ -18,6 +19,7 @@ export const SignInUp = () => {
 	'password': '',
     })
     const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     const handleSignUpClick = () => {
 	axios
@@ -27,7 +29,7 @@ export const SignInUp = () => {
 	    )
 	    .then((response) => {
 		if(response.data === "You already have an account") {
-
+		    handleSignInClick()
 		} 
 		else {
 		    console.log(response.data)
@@ -68,8 +70,9 @@ export const SignInUp = () => {
 	    .then((response) => {
 		if(response.data === "Login successfully") {
 		    dispatch(
-			authSlice.actions.setAccount(response.data)
+			authSlice.actions.setAccount({ user: { username: loginInfo.username } })
 		    )
+		    navigate(`/`)
 		} 
 		else {
 		    console.log(response.data)
@@ -92,8 +95,8 @@ export const SignInUp = () => {
 	    <div className="items-center space-y-8 flex flex-col">
 		<h1 className="text-white font-semibold text-5xl">Sign in</h1>	
 		<div className="flex flex-col space-y-4 items-center">
-		    <CssTextField value={loginInfo.username} onChange={handleSignInTextChange} id='username' label='Username' variant='outlined'/> 
-		    <CssTextField value={loginInfo.password} onChange={handleSignInTextChange} id='password' label='Password' variant='outlined'/> 
+		    <CssTextField value={loginInfo.username} onChange={handleSignInTextChange} id='username' type='email' label='Username' variant='outlined'/> 
+		    <CssTextField value={loginInfo.password} onChange={handleSignInTextChange} id='password' type='password' label='Password' variant='outlined'/> 
 		    <p onClick={() => setSignType('signUp')} className="text-gray-200 text-sm cursor-pointer hover:text-gray-300">Don't have an account?</p>
 		</div>	
 		<Button onClick={handleSignInClick} variant='contained' className='capitalize w-24'>Sign in</Button>

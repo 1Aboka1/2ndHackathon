@@ -12,14 +12,18 @@ import ProtectedRoute from './routes/ProtectedRoute'
 
 function App() {	
     return (
-	<BrowserRouter>
-	    <Routes>
-		<Route path="/"> 
-		    <Route index element={<Home/>}/>
-		    <Route path="sign_in_up" element={<SignInUp/>}/>
-		</Route>
-	    </Routes>
-	</BrowserRouter>
+    	<Provider store={store}>
+	    <PersistGate persistor={persistor} loading={null}>
+		<BrowserRouter>
+		    <Routes>
+			<Route path="/"> 
+			    <Route index element={<Home/>}/>
+			    <Route path="sign_in_up" element={<SignInUp/>}/>
+			</Route>
+		    </Routes>
+		</BrowserRouter>
+	    </PersistGate>
+	</Provider>
     )
 }
 
