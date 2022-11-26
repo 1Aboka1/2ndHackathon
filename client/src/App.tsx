@@ -8,6 +8,7 @@ import { SignInUp } from './pages/SignInUp'
 import {Provider} from 'react-redux'
 import store, { persistor } from './store'
 import { PersistGate } from 'redux-persist/integration/react'
+import ProtectedRoute from './routes/ProtectedRoute'
 
 function App() {	
     return (
