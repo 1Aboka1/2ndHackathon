@@ -1,4 +1,4 @@
-import { DataGrid, GridColDef, GridValueGetterParams, GridSelectionModel } from '@mui/x-data-grid'
+import { DataGrid, GridColDef, GridValueGetterParams, GridComparatorFn, GridSelectionModel } from '@mui/x-data-grid'
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import {useEffect, useState} from 'react';
 import axios from 'axios';
@@ -35,7 +35,6 @@ export const TableView = () => {
       {
 	field: 'deadline',
 	headerName: 'Deadline',
-	sortable: false,
 	width: 160,
       },
       { field: 'author', headerName: 'Author', width: 130 },
