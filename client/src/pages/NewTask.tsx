@@ -40,7 +40,7 @@ export const NewTask = () => {
     }
 
     const [date, setDate] = useState<Dayjs | null>(
-	dayjs('2014-08-18T21:11:54'),
+	dayjs('2014.08.18'),
       );
     const handleDateChange = (newValue: Dayjs | null) => {
 	setDate(newValue);

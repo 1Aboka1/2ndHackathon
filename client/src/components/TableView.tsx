@@ -2,6 +2,7 @@ import { DataGrid, GridColDef, GridValueGetterParams, GridSelectionModel } from 
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import {useEffect, useState} from 'react';
 import axios from 'axios';
+import dayjs from 'dayjs';
 
 export const TableView = () => {
     const darkTheme = createTheme({
@@ -11,23 +12,26 @@ export const TableView = () => {
     });
     const [tasks, setTasks] = useState<any>([])
     const [selectionModel, setSelectionModel] = useState<GridSelectionModel>([])
+    const [ids, setIds] = useState<any>([])
 
     useEffect(() => {
 	axios
 	    .get('/tasks')
 	    .then((response) => {
-		setTasks(response.data)
+		setTasks(response.data.map((item: any) => {
+		    item['deadline'] = dayjs(item['deadline']).format('DD/MM/YYYY')
+		    return item
+		}))
 		setSelectionModel(response.data.filter((item: any) => item.done === true).map((item: any) => item.id))
+		setIds(response.data.map((item: any) => item.id))
 	    })
 	    .catch((error) => {
 		console.log(error)
 	    })
     }, [])
-    console.log(selectionModel)
 
     const columns: GridColDef[] = [
-      { field: 'id', headerName: 'ID', width: 70 },
-      { field: 'name', headerName: 'Taskname', width: 130 },
+      { field: 'name', headerName: 'Taskname', width: 200 },
       {
 	field: 'deadline',
 	headerName: 'Deadline',
@@ -37,10 +41,12 @@ export const TableView = () => {
       { field: 'author', headerName: 'Author', width: 130 },
       { field: 'tags', headerName: 'Tags', width: 200 },
       { field: 'usernames', headerName: 'Users', width: 200 },
+      { field: 'id', headerName: 'ID', width: 100 },
     ];
 
-    useEffect(() => {
-	selectionModel.map((item: any) => {
+    const handleSelectionChange = (newSelectionModel: any) => {
+	setSelectionModel(newSelectionModel)
+	newSelectionModel.map((item: any) => {
 	    axios
 		.put(
 		    `/done`,
@@ -53,7 +59,21 @@ export const TableView = () => {
 		    console.log(error)
 		})
 	    })
-    }, [selectionModel])
+	const newArr = ids.filter((x: any) => !newSelectionModel.includes(x))
+	newArr.map((item: any) => {
+	    axios
+		.put(
+		    `/undone`,
+		    { id: item },
+		)
+		.then((response) => {
+		    console.log(response.data)
+		})
+		.catch((error) => {
+		    console.log(error)
+		})
+	    })
+    }
 
     return (
 	    <ThemeProvider theme={darkTheme}>
@@ -64,9 +84,7 @@ export const TableView = () => {
 	    pageSize={5}
 	    rowsPerPageOptions={[5]}
 	    checkboxSelection
-	    onSelectionModelChange={(newSelectionModel) => {
-	      setSelectionModel(newSelectionModel)
-	    }}
+	    onSelectionModelChange={handleSelectionChange}
 	    selectionModel={selectionModel}
 	  />
 	</div>
