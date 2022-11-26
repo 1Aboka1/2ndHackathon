@@ -3,6 +3,9 @@ import { styled } from '@mui/material/styles'
 import TextField from '@mui/material/TextField'
 import {Button} from "@mui/material"
 import axios from "axios"
+import store from "../store"
+import { useDispatch } from 'react-redux'
+import authSlice from "../store/slices/auth"
 
 export const SignInUp = () => {
     const [signType, setSignType] = useState('signUp')
@@ -10,11 +13,11 @@ export const SignInUp = () => {
 	'username': '',
 	'password': '',
     })
-
     const [loginInfo, setLoginInfo] = useState({
 	'username': '',
 	'password': '',
     })
+    const dispatch = useDispatch()
 
     const handleSignUpClick = () => {
 	axios
@@ -64,7 +67,9 @@ export const SignInUp = () => {
 	    )
 	    .then((response) => {
 		if(response.data === "Login successfully") {
-		    console.log('yeaah')
+		    dispatch(
+			authSlice.actions.setAccount(response.data)
+		    )
 		} 
 		else {
 		    console.log(response.data)
@@ -86,7 +91,7 @@ export const SignInUp = () => {
 	return (
 	    <div className="items-center space-y-8 flex flex-col">
 		<h1 className="text-white font-semibold text-5xl">Sign in</h1>	
-		<div className="flex flex-col space-y-4">
+		<div className="flex flex-col space-y-4 items-center">
 		    <CssTextField value={loginInfo.username} onChange={handleSignInTextChange} id='username' label='Username' variant='outlined'/> 
 		    <CssTextField value={loginInfo.password} onChange={handleSignInTextChange} id='password' label='Password' variant='outlined'/> 
 		    <p onClick={() => setSignType('signUp')} className="text-gray-200 text-sm cursor-pointer hover:text-gray-300">Don't have an account?</p>
