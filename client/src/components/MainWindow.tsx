@@ -7,6 +7,7 @@ import {BoardView} from './BoardView'
 import {TableView} from '@mui/icons-material'
 import { useSelector } from 'react-redux'
 import {RootState} from '../store'
+import {useNavigate} from 'react-router-dom'
 
 const styleForSelectedButton = 'border-b border-white'
 const styleForApplied = 'text-blue-300'
@@ -16,8 +17,11 @@ export const MainWindow = () => {
     const [filterApplied, setFilterApplied] = useState(false)
     const [sortApplied, setSortApplied] = useState(false)
     const user = useSelector((state: RootState) => state.auth.account)
+    const navigate = useNavigate()
 
-    const handleNewButtonClick = () => {}
+    const handleNewButtonClick = () => {
+    	navigate('/new_task')	
+    }
 
     return (
 	<div className="p-5 flex flex-col">

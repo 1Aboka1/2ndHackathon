@@ -3,6 +3,7 @@ import {useEffect, useState} from "react"
 import LensOutlinedIcon from '@mui/icons-material/LensOutlined'
 import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined'
 import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined'
+import Chip from '@mui/material/Chip'
 
 export const BoardView = () => {
     const [tasks, setTasks] = useState<any>([])
@@ -31,21 +32,22 @@ export const BoardView = () => {
 	},
     ]
 
+    // const colors = ['red-300', 'green-300', 'blue-300', 'yellow-300']
+    const colors = ['primary', 'secondary', 'success']
+
     const renderTask = (task: any) => {
+	const color: string = colors[Math.floor(Math.random()*colors.length)]
 	return (
-	    <div className="bg-gray-800 p-3 rounded-xl">
+	    <div className="bg-gray-800 p-3 rounded-xl space-y-3">
 		<div className="flex flex-row items-center space-x-2">
 		    <ArticleOutlinedIcon className="text-gray-200"/>
 		    <h1 className="text-gray-200 text-sm">{task.name}</h1>
 		</div>
-		<div>
-		    {
-			// task.tags.map((item: any) => {
-			//     return ( <p>{item}</p> )
-			// })
-			task.tag
-		    }
-		</div>
+		{
+		    task.tags.map((tag: any) => {
+			return <Chip label={tag} className='px-3' color={'primary'}/>
+		    })
+		}
 	    </div>
 	)
     }

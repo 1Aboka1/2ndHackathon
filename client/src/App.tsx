@@ -5,6 +5,7 @@ import {
 } from 'react-router-dom'
 import { Home } from './pages/Home'
 import { SignInUp } from './pages/SignInUp'
+import { NewTask } from './pages/NewTask'
 import {Provider} from 'react-redux'
 import store, { persistor } from './store'
 import { PersistGate } from 'redux-persist/integration/react'
@@ -19,6 +20,7 @@ function App() {
 			<Route path="/"> 
 			    <Route index element={<Home/>}/>
 			    <Route path="sign_in_up" element={<SignInUp/>}/>
+			    <Route path="new_task" element={<NewTask/>}/>
 			</Route>
 		    </Routes>
 		</BrowserRouter>
