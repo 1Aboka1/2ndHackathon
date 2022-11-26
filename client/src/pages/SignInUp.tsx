@@ -68,7 +68,7 @@ export const SignInUp = () => {
 		loginInfo,
 	    )
 	    .then((response) => {
-		if(response.data === "Login successfully") {
+		if(response.data=== "Login successfully") {
 		    dispatch(
 			authSlice.actions.setAccount({ user: { username: loginInfo.username } })
 		    )

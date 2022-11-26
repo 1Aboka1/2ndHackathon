@@ -51,6 +51,10 @@ export const MainWindow = () => {
 	setAnchorEl(event.currentTarget);
     }
 
+    const handleRedirectToProfile = () => {
+	navigate(`/profile/${user?.user.username}`)
+    }
+
     return (
 	<div className="p-5 flex flex-col">
 	    <div className='border-b border-gray-800 space-y-7'>
@@ -59,7 +63,16 @@ export const MainWindow = () => {
 			<TaskAltOutlinedIcon className='text-white' fontSize='large'/>
 			<h1 className="text-gray-300 text-3xl font-semibold">Tasks</h1>
 		    </div>
+		    <div>
+		    <div className='flex flex-row space-x-2'>
+		    <div onClick={handleRedirectToProfile} className='items-center cursor-pointer space-x-3 flex flex-row'>
+			<img/>
+			<p className='text-gray-400'>{user?.user.username}</p>
+		    </div>
 		    <Button variant='contained' color='warning' onClick={handleLogOut} className='text-white'>Exit</Button>
+
+		    </div>
+		    </div>
 		</div>
 		<div className="flex flex-row items-center justify-between">
 		    <div className='flex flex-row space-x-2'>

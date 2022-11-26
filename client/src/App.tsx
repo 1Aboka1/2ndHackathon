@@ -7,10 +7,10 @@ import { Home } from './pages/Home'
 import { SignInUp } from './pages/SignInUp'
 import { NewTask } from './pages/NewTask'
 import { TaskView } from './pages/TaskView'
+import { Profile } from './pages/Profile'
 import {Provider} from 'react-redux'
 import store, { persistor } from './store'
 import { PersistGate } from 'redux-persist/integration/react'
-import ProtectedRoute from './routes/ProtectedRoute'
 
 function App() {	
     return (
@@ -24,6 +24,9 @@ function App() {
 			    <Route path="new_task" element={<NewTask/>}/>
 			    <Route path="task_view">
 				<Route path=":taskId" element={<TaskView/>}/>
+			    </Route>
+			    <Route path='profile'>
+				<Route path=':id' element={<Profile/>}/>
 			    </Route>
 			</Route>
 		    </Routes>
