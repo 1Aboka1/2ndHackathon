@@ -9,7 +9,7 @@ import authSlice from "../store/slices/auth"
 import { useNavigate } from "react-router-dom"
 
 export const SignInUp = () => {
-    const [signType, setSignType] = useState('signUp')
+    const [signType, setSignType] = useState('signIn')
     const [registrationInfo, setRegistrationInfo] = useState({
 	'username': '',
 	'password': '',

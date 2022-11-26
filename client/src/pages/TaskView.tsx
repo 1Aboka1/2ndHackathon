@@ -1,7 +1,7 @@
 import {Button, TextField} from "@mui/material"
 import { styled } from '@mui/material/styles'
 import dayjs, { Dayjs } from 'dayjs'
-import {useState} from "react"
+import {useEffect, useState} from "react"
 import ToggleButton from '@mui/material/ToggleButton'
 import axios from "axios"
 import { TagPicker } from 'rsuite'
@@ -17,10 +17,12 @@ import {useSelector} from "react-redux"
 import {RootState} from "../store"
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import {useNavigate} from "react-router-dom"
+import { useParams } from "react-router-dom"
 
-export const NewTask = () => {
+export const TaskView = () => {
     const user: any = useSelector((state: RootState) => state.auth.account)
     const navigate = useNavigate()
+    const taskId = useParams().taskId
 
     const [task, setTask] = useState<any>({
 	name: '',
@@ -30,6 +32,14 @@ export const NewTask = () => {
 	deadline: "",
 	author: user['user']['username'],
     })	
+
+    useEffect(() => {
+	axios
+	    .get(`/tasks/${taskId}`)
+	    .then((response) => {
+		setTask(response.data)
+	    })
+    }, [taskId])
 
     const handleTextFieldChange = (event: any) => {
 	const id = event.currentTarget.id
@@ -59,9 +69,13 @@ export const NewTask = () => {
       };
 
     const handleCreate = () => {
+	if(task.name.length === 0) {
+	    alert('Type name of the task')
+	    return null
+	}
 	axios
-	    .post(
-		'/create',
+	    .put(
+		'/change',
 		task,
 	    )
 	    .then((response) => {
@@ -114,7 +128,7 @@ export const NewTask = () => {
 	    <div className="mx-auto pt-[10px] w-[700px]">
 		<div className="items-center flex flex-row mb-3">
 		    <CssTextField size="medium" placeholder="Untitled" defaultValue='Untitled' className="font-bold" value={task.name} onChange={handleTextFieldChange} id='name' variant='standard'/>
-		    <Button onClick={handleCreate} variant='contained'>Create</Button>
+		    <Button onClick={handleCreate} variant='contained'>Save</Button>
 		</div>
 		<div className="space-y-3">
 		<div className="flex flex-row space-x-16 h-14 items-center">
