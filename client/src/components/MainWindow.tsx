@@ -5,9 +5,10 @@ import TaskAltOutlinedIcon from '@mui/icons-material/TaskAltOutlined'
 import {useState} from 'react'
 import {BoardView} from './BoardView'
 import {TableView} from '@mui/icons-material'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import {RootState} from '../store'
 import {useNavigate} from 'react-router-dom'
+import authSlice from '../store/slices/auth'
 
 const styleForSelectedButton = 'border-b border-white'
 const styleForApplied = 'text-blue-300'
@@ -18,9 +19,15 @@ export const MainWindow = () => {
     const [sortApplied, setSortApplied] = useState(false)
     const user = useSelector((state: RootState) => state.auth.account)
     const navigate = useNavigate()
+    const dispatch = useDispatch()
 
     const handleNewButtonClick = () => {
     	navigate('/new_task')	
+    }
+
+    const handleLogOut = () => {
+	dispatch(authSlice.actions.setLogout())
+	navigate('/sign_in_up')
     }
 
     return (
@@ -31,7 +38,7 @@ export const MainWindow = () => {
 			<TaskAltOutlinedIcon className='text-white' fontSize='large'/>
 			<h1 className="text-gray-300 text-3xl font-semibold">Tasks</h1>
 		    </div>
-		    <div className='text-white'>Exit</div>
+		    <Button variant='contained' color='warning' onClick={handleLogOut} className='text-white'>Exit</Button>
 		</div>
 		<div className="flex flex-row items-center justify-between">
 		    <div className='flex flex-row space-x-2'>

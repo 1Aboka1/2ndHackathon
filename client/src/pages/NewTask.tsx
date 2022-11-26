@@ -4,6 +4,7 @@ import dayjs, { Dayjs } from 'dayjs'
 import {useState} from "react"
 import ToggleButton from '@mui/material/ToggleButton'
 import axios from "axios"
+import { TagPicker } from 'rsuite'
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup'
 import ReplayIcon from '@mui/icons-material/Replay'
 import PersonIcon from '@mui/icons-material/Person'
@@ -13,6 +14,8 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import {useSelector} from "react-redux"
 import {RootState} from "../store"
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
 
 export const NewTask = () => {
     const user: any = useSelector((state: RootState) => state.auth.account)
@@ -67,8 +70,17 @@ export const NewTask = () => {
 	    })
     }
 
+    const darkTheme = createTheme({
+      palette: {
+	mode: 'dark',
+      },
+    });
+
+    const [users, setUsers] = useState([])
+    const [tags, setTags] = useState([])
     return (
-	<div className="bg-white h-screen space-y-20">
+	<div className="bg-black h-screen space-y-20">
+	    <ThemeProvider theme={darkTheme}>
 	    <div className="mx-auto pt-[100px] w-[700px]">
 		<div className="items-center flex flex-row">
 		    <CssTextField size="medium" placeholder="Untitled" defaultValue='Untitled' className="font-bold" value={task.name} onChange={handleTextFieldChange} id='name' variant='standard'/>
@@ -96,6 +108,15 @@ export const NewTask = () => {
 			<PersonIcon className='text-gray-400'/> 
 			<p className="text-gray-400">Usernames</p>
 		    </div>
+		    <TagPicker
+		      creatable
+		      data={users}
+		      style={{ width: 300 }}
+		      menuStyle={{ width: 300 }}
+		      onCreate={(value, item) => {
+			() => 
+		      }}
+		    />
 		</div>
 		<div className="flex flex-row space-x-16 h-14 items-center">
 		    <div className="flex w-36 items-center flex-row space-x-2">
@@ -120,6 +141,7 @@ export const NewTask = () => {
 
 		</div>
 	    </div>
+	    </ThemeProvider>
 	</div>
     ) 
 }
@@ -143,12 +165,19 @@ const CssTextField = styled(TextField)({
   '& .MuiInput-underline:after': {
     borderBottomColor: 'black',
   },
+  '& .MuiInput-underline:before': {
+    borderBottomColor: 'black',
+  },
   '& .MuiOutlinedInput-root': {
     '& fieldset': {
       borderColor: 'white',
     },
     '&:hover fieldset': {
       borderColor: 'black',
+
+  '& .MuiInput-underline': {
+    borderBottomColor: 'black',
+  },
     },
     '&.Mui-focused fieldset': {
       borderColor: 'primary',
