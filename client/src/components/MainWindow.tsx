@@ -88,8 +88,12 @@ export const MainWindow = () => {
 		setSelectionModel(response.data.filter((item: any) => item.done === true).map((item: any) => item.id))
 		setIds(response.data.map((item: any) => item.id))
 		let arr1: any = []
-		response.data.map((item: any) => { arr1 = arr1.concat(item.tags) })
-		console.log(arr1)
+		response.data.map((item: any) => {
+		    console.log(item['deadline'])
+		    item['deadline'] = dayjs(item['deadline']).format('MM/DD/YYYY')
+		    return item
+		}).filter((item: any) => item.author === user?.user.username).map((item: any) => { arr1 = arr1.concat(item.tags) })
+		arr1 = [...new Set(arr1)]
 		setfilterList(arr1)
 		setTasksMain(response.data.map((item: any) => {
 		    item['deadline'] = dayjs(item['deadline']).format('DD/MM/YYYY')
@@ -167,7 +171,7 @@ export const MainWindow = () => {
 				filterList.map((item: any) => {
 				    if(checkedFilter !== undefined) {
 				    const doescontain = (checkedFilter.indexOf(item) !== -1)
-				    return <FormControlLabel control={<Checkbox 
+				    return <FormControlLabel className='mx-2' control={<Checkbox 
 					id={item}
 					onChange={handleToggle}
 				    />} label={item}
