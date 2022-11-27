@@ -348,7 +348,7 @@ const BoardView = ({ tasks }: any) => {
 	}
 
 	return (
-	    <div className="w-[220px] space-y-3">
+	    <div className="w-[250px] space-y-3">
 		<div className="flex flex-row space-x-1 items-center">
 		    { column.icon } 
 		    { column.name }

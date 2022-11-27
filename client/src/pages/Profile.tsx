@@ -4,13 +4,20 @@ import axios from 'axios';
 import {useState} from 'react';
 import {useSelector} from 'react-redux';
 import {useNavigate} from 'react-router-dom';
-import {Button} from 'rsuite';
+import Button from '@mui/material/Button'
 import {RootState} from '../store';
 
 export const Profile = () => {
     const darkTheme = createTheme({
       palette: {
 	mode: 'dark',
+	primary: {
+	    dark: "#FF69B4",
+	    main: "#FF69B4",
+	},
+	secondary: {
+	    main: '#00e676',
+	}
       },
     });
 
@@ -73,15 +80,22 @@ export const Profile = () => {
 	    	console.log(error)
 	    })
     }
+    const handleRedirectToMain = () => {
+    	navigate('/')
+    }
 
     return (
 	    <ThemeProvider theme={darkTheme}>
-	<div className="bg-black h-screen space-y-20">
+	<div className="bg-black h-screen space-y-7">
+	    <div onClick={handleRedirectToMain} className="p-6 cursor-pointer flex flex-row items-center space-x-3">
+		<img src={require('../assets/photo1669449406.jpeg')} className='w-12 h-12 rounded-xl' alt='Logo'/>
+		<h1 className="text-white font-semibold text-xl">Achiever</h1>
+	    </div>
 	    <div className="mx-auto w-[700px] divide-y space-y-5 p-10">
 		<div className='space-y-3'>
 		    <h1 className='text-gray-200 text-xl'>Upload Profile image</h1>
 		    <input type="file" name="avatar" id="avatar" onChange={onSelectImageHandler}/>
-		    <Button onClick={onUpload}>Upload</Button>
+		    <Button color='primary' variant='contained' onClick={onUpload}>Upload</Button>
 		</div>
 		<div className='space-y-3'>
 		    <h1 className='text-gray-200 pt-2 text-xl'>Change password</h1>
@@ -89,7 +103,7 @@ export const Profile = () => {
 			<TextField value={oldPass} label='Old password' type='password' onChange={(event: any) => setOldPass(event.currentTarget.value)}/>	
 			<TextField value={newPass} label='New password' type='password' onChange={(event: any) => setNewPass(event.currentTarget.value)}/>	
 		    </div>
-		    <Button onClick={handlePasswordReset}>Change</Button>
+		    <Button variant='contained' onClick={handlePasswordReset}>Change</Button>
 		</div>
 	    </div>
 	</div>
