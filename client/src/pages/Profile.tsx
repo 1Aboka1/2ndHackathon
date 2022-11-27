@@ -18,23 +18,30 @@ export const Profile = () => {
     const [newPass, setNewPass] = useState('')
     const user = useSelector((state: RootState) => state.auth.account)
     const navigate = useNavigate()
+    const [ava, setAva] = useState<any>('')
 
     const onSelectImageHandler = (event: any) => {
-	    const file = event?.currentTarget.files[0];
-	    const formData = new FormData();
-	    formData.append('avatar', file)
+	    const file = event?.target.files[0];
+	    setAva(file)
+	}
 
+    const onUpload = () => {
+	    const formData = new FormData()
+	    formData.append('File', ava)
 	    const config = {
 		headers: {
-		    "Content-Type":"multipart/form-data" 
+		    "Content-Type":"multipart/form-data",
+		    'Content-Disposition': `attachment; filename=${user?.user.username}.png`
+
 		}
 	    };
+	    console.log(ava)
 
 	    axios
 		.post(
 		    '/upload-avatar',
 		    formData,
-		    config,
+		    config
 		)
 		.then((response) => {
 		    console.log(response.data)
@@ -42,7 +49,7 @@ export const Profile = () => {
 		.catch((error) => {
 		    console.log(error)
 		})
-	}
+    }
 
     const handlePasswordReset = () => {
 	axios
@@ -74,6 +81,7 @@ export const Profile = () => {
 		<div className='space-y-3'>
 		    <h1 className='text-gray-200 text-xl'>Upload Profile image</h1>
 		    <input type="file" name="avatar" id="avatar" onChange={onSelectImageHandler}/>
+		    <Button onClick={onUpload}>Upload</Button>
 		</div>
 		<div className='space-y-3'>
 		    <h1 className='text-gray-200 pt-2 text-xl'>Change password</h1>

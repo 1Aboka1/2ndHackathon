@@ -118,7 +118,7 @@ export const MainWindow = () => {
 			    ?
 			    <BoardView/>
 			    :
-			    <TableView tasks={tasks}/>
+			    <TableView/>
 	    }
 	   </div>
 	</div>
@@ -126,7 +126,7 @@ export const MainWindow = () => {
 }
 
 // TableView
-const TableView = ({ tasks }) => {
+const TableView = () => {
     const darkTheme = createTheme({
       palette: {
 	mode: 'dark',
@@ -135,6 +135,7 @@ const TableView = ({ tasks }) => {
     const [tasks, setTasks] = useState<any>([])
     const [selectionModel, setSelectionModel] = useState<GridSelectionModel>([])
     const [ids, setIds] = useState<any>([])
+    const user = useSelector((state: RootState) => state.auth.account)
 
     useEffect(() => {
 	axios
@@ -143,7 +144,7 @@ const TableView = ({ tasks }) => {
 		setTasks(response.data.map((item: any) => {
 		    item['deadline'] = dayjs(item['deadline']).format('DD/MM/YYYY')
 		    return item
-		}))
+		}).filter((item: any) => item.author === user?.user.username))
 		setSelectionModel(response.data.filter((item: any) => item.done === true).map((item: any) => item.id))
 		setIds(response.data.map((item: any) => item.id))
 	    })
@@ -219,12 +220,16 @@ const TableView = ({ tasks }) => {
 const BoardView = () => {
     const [tasks, setTasks] = useState<any>([])
     const navigate = useNavigate()
+    const user = useSelector((state: RootState) => state.auth.account)
 
     useEffect(() => {
 	axios
 	    .get('/tasks')
 	    .then((response) => {
-		setTasks(response.data)
+		setTasks(response.data.map((item: any) => {
+		    item['deadline'] = dayjs(item['deadline']).format('DD/MM/YYYY')
+		    return item
+		}).filter((item: any) => item.author === user?.user.username))
 	    })
 	    .catch((error) => {
 		console.log(error)

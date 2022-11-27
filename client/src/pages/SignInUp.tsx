@@ -32,7 +32,8 @@ export const SignInUp = () => {
 		    handleSignInClick()
 		} 
 		else {
-		    console.log(response.data)
+		    alert('You have signed up')
+		    setSignType('signIn')
 		}
 	    })
 	    .catch((error) => {
