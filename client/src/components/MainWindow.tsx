@@ -1,4 +1,5 @@
 import Button from '@mui/material/Button'
+import Stack from '@mui/material/Stack'
 import Chip from '@mui/material/Chip'
 import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded'
 import TableRowsRoundedIcon from '@mui/icons-material/TableRowsRounded'
@@ -331,11 +332,13 @@ const BoardView = ({ tasks }: any) => {
 		    <ArticleOutlinedIcon className="text-gray-200"/>
 		    <h1 className="text-gray-200 text-sm">{task.name}</h1>
 		</div>
+		<Stack direction="row" spacing={1}>
 		{
 		    task.tags.map((tag: any) => {
 			return <Chip label={tag} className='px-3 font-semibold' color={'primary'} size='small'/>
 		    })
 		}
+		</Stack>
 	    </div>
 </ThemeProvider>
 	)
