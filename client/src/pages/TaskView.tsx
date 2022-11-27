@@ -55,7 +55,7 @@ export const TaskView = () => {
     const handleDateChange = (newValue: Dayjs | null) => {
 	setDate(newValue);
 	let tempObject = Object.assign({}, task)
-	tempObject['deadline'] = date
+	tempObject['deadline'] = newValue
 	setTask(tempObject)
       };
 
