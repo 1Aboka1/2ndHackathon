@@ -223,9 +223,9 @@ const TableView = ({ tasks, selectionModel, ids, setSelectionModel, filterList }
       {
 	field: 'deadline',
 	headerName: 'Deadline',
-	width: 160,
+	width: 120,
       },
-      { field: 'author', headerName: 'Author', width: 130 },
+      { field: 'author', headerName: 'Author', width: 90 },
       { field: 'tags', headerName: 'Tags', width: 200 },
       { field: 'usernames', headerName: 'Users', width: 200 },
       { field: 'id', headerName: 'ID', width: 100 },
@@ -247,6 +247,7 @@ const TableView = ({ tasks, selectionModel, ids, setSelectionModel, filterList }
 		})
 	    })
 	const newArr = ids.filter((x: any) => !newSelectionModel.includes(x))
+	console.log(newArr)
 	newArr.map((item: any) => {
 	    axios
 		.put(
@@ -271,6 +272,7 @@ const TableView = ({ tasks, selectionModel, ids, setSelectionModel, filterList }
 	    pageSize={5}
 	    rowsPerPageOptions={[5]}
 	    checkboxSelection
+	    disableSelectionOnClick
 	    onSelectionModelChange={handleSelectionChange}
 	    selectionModel={selectionModel}
 	  />
