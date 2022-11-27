@@ -92,6 +92,13 @@ export const TaskView = () => {
     const darkTheme = createTheme({
       palette: {
 	mode: 'dark',
+	primary: {
+	    dark: "#FF69B4",
+	    main: "#FF69B4",
+	},
+	secondary: {
+	    main: '#00e676',
+	}
       },
     });
 
@@ -121,6 +128,15 @@ export const TaskView = () => {
 	navigate('/')
     }
 
+    const handleDelete = (event: any) => {
+    	const id = task.id
+    	axios
+		.post('/delete', {id})
+		.then((response) => { console.log(response.data); navigate('/') })
+		.catch((error) => { console.log(error) })
+
+    }
+
     return (
 	<div className="bg-black h-screen space-y-17">
 	    <ThemeProvider theme={darkTheme}>
@@ -131,7 +147,11 @@ export const TaskView = () => {
 	    <div className="mx-auto pt-[10px] w-[700px]">
 		<div className="items-center flex flex-row mb-3">
 		    <CssTextField size="medium" placeholder="Untitled" defaultValue='Untitled' className="font-bold" value={task.name} onChange={handleTextFieldChange} id='name' variant='standard'/>
-		    <Button onClick={handleCreate} variant='contained'>Save</Button>
+		    <div className="flex flex-row space-x-2">
+		    <Button onClick={handleCreate} color={'primary'} variant='contained'>Save</Button>
+		    <Button onClick={handleDelete} variant='contained'>Delete</Button>
+
+		    </div>
 		</div>
 		<div className="space-y-3">
 		<div className="flex flex-row space-x-16 h-14 items-center">

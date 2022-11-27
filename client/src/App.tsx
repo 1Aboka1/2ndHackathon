@@ -11,6 +11,7 @@ import { Profile } from './pages/Profile'
 import {Provider} from 'react-redux'
 import store, { persistor } from './store'
 import { PersistGate } from 'redux-persist/integration/react'
+import ProtectedRoute from './routes/ProtectedRoute'
 
 function App() {	
     return (
@@ -19,8 +20,8 @@ function App() {
 		<BrowserRouter>
 		    <Routes>
 			<Route path="/"> 
+			<Route path='' element={<ProtectedRoute/>}>
 			    <Route index element={<Home/>}/>
-			    <Route path="sign_in_up" element={<SignInUp/>}/>
 			    <Route path="new_task" element={<NewTask/>}/>
 			    <Route path="task_view">
 				<Route path=":taskId" element={<TaskView/>}/>
@@ -28,6 +29,8 @@ function App() {
 			    <Route path='profile'>
 				<Route path=':id' element={<Profile/>}/>
 			    </Route>
+			</Route>
+			    <Route path="sign_in_up" element={<SignInUp/>}/>
 			</Route>
 		    </Routes>
 		</BrowserRouter>

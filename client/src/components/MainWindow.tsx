@@ -16,7 +16,7 @@ import authSlice from '../store/slices/auth'
 import {DataGrid, GridColDef, GridSelectionModel} from '@mui/x-data-grid'
 import {ThemeProvider} from '@emotion/react'
 import axios from 'axios'
-import {Checkbox, createTheme} from '@mui/material'
+import {Checkbox, createTheme, FormControlLabel, FormGroup} from '@mui/material'
 import dayjs from 'dayjs'
 
 
@@ -57,12 +57,69 @@ export const MainWindow = () => {
     const darkTheme = createTheme({
       palette: {
 	mode: 'dark',
+	primary: {
+	    dark: "#FF69B4",
+	    main: "#FF69B4",
+	},
+	secondary: {
+	    main: '#00e676',
+	}
       },
     });
 
-    
+    const [tasks, setTasks] = useState<any>([])
+    const [selectionModel, setSelectionModel] = useState<GridSelectionModel>([])
+    const [ids, setIds] = useState<any>([])
+    const [filterList, setfilterList] = useState([])
+
+    const [checkedFilter, setchecked] = useState<any>([])
+    let [tasksMain, setTasksMain] = useState<any>([])
+
+    useEffect(() => {
+	axios
+	    .get('/tasks')
+	    .then((response) => {
+		console.log('check')
+		setTasks(response.data.map((item: any) => {
+		    console.log(item['deadline'])
+		    item['deadline'] = dayjs(item['deadline']).format('MM/DD/YYYY')
+		    return item
+		}).filter((item: any) => item.author === user?.user.username))
+		setSelectionModel(response.data.filter((item: any) => item.done === true).map((item: any) => item.id))
+		setIds(response.data.map((item: any) => item.id))
+		let arr1: any = []
+		response.data.map((item: any) => { arr1 = arr1.concat(item.tags) })
+		console.log(arr1)
+		setfilterList(arr1)
+		setTasksMain(response.data.map((item: any) => {
+		    item['deadline'] = dayjs(item['deadline']).format('DD/MM/YYYY')
+		    return item
+		}).filter((item: any) => item.author === user?.user.username))
+		setchecked(arr1)
+	    })
+	    .catch((error) => {
+		console.log(error)
+	    })
+    }, [user?.user.username])
+
+    const handleToggle = (event: any) => {
+        const newChecked: any = [...checkedFilter]
+	const searchKeyword: any = event.currentTarget.id
+	const currentIndex = newChecked.indexOf(searchKeyword) 
+        
+        if(currentIndex === -1) {
+            newChecked.push(searchKeyword)
+        } else {
+            newChecked.splice(currentIndex, 1)
+        }
+        setchecked(newChecked)
+	let arr2 = tasksMain.filter((item: any) => newChecked.some((r: any) => item.tags.includes(r)))
+	setTasks(arr2)
+    }
+
 
     return (
+			<ThemeProvider theme={darkTheme}>
 	<div className="p-5 flex flex-col">
 	    <div className='border-b border-gray-800 space-y-7'>
 		<div className="bg-black flex flex-row justify-between items-center">
@@ -76,7 +133,7 @@ export const MainWindow = () => {
 			<img/>
 			<p className='text-gray-400'>{user?.user.username}</p>
 		    </div>
-		    <Button variant='contained' color='warning' onClick={handleLogOut} className='text-white'>Exit</Button>
+		    <Button variant='contained' color='secondary' onClick={handleLogOut} className='text-white'>Exit</Button>
 
 		    </div>
 		    </div>
@@ -95,7 +152,6 @@ export const MainWindow = () => {
         aria-controls={open ? 'basic-menu' : undefined}
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined} onClick={handleFilterClick} className={'capitalize hover:bg-gray-900 ' + (filterApplied ? ' text-blue-300 ' : 'text-gray-100')}>Filter</Button>
-			<ThemeProvider theme={darkTheme}>
 			<Menu
 			    id="basic-menu"
 			    anchorEl={anchorEl}
@@ -104,8 +160,28 @@ export const MainWindow = () => {
 			    MenuListProps={{
 			      'aria-labelledby': 'basic-button',
 			    }}
+			    className='px-4 rounded-xl'
 			  >
-			  </Menu></ThemeProvider>
+			   <FormGroup className='rounded-xl'>
+			  {
+				filterList.map((item: any) => {
+				    if(checkedFilter !== undefined) {
+				    const doescontain = (checkedFilter.indexOf(item) !== -1)
+				    return <FormControlLabel control={<Checkbox 
+					id={item}
+					onChange={handleToggle}
+				    />} label={item}
+					checked={doescontain}
+				    />
+
+				    } else {
+				    return null
+				    }
+				})
+			  }
+			  </FormGroup>
+
+			  </Menu>
 			<div className='py-1'>
 				<Button onClick={handleNewButtonClick} variant='contained' className={'capitalize text-white'}>New</Button>
 			</div>
@@ -116,42 +192,27 @@ export const MainWindow = () => {
 	    {
 		    selectedView === 'board' 
 			    ?
-			    <BoardView/>
+			    <BoardView tasks={tasks}/>
 			    :
-			    <TableView/>
+			    <TableView tasks={tasks} selectionModel={selectionModel} filterList={filterList} ids={ids} setSelectionModel={setSelectionModel}/>
 	    }
 	   </div>
 	</div>
+</ThemeProvider>
     )
 }
 
 // TableView
-const TableView = () => {
+const TableView = ({ tasks, selectionModel, ids, setSelectionModel, filterList }: any) => {
     const darkTheme = createTheme({
       palette: {
 	mode: 'dark',
+	primary: {
+	    dark: "#FF69B4",
+	    main: "#FF69B4",
+	},
       },
     });
-    const [tasks, setTasks] = useState<any>([])
-    const [selectionModel, setSelectionModel] = useState<GridSelectionModel>([])
-    const [ids, setIds] = useState<any>([])
-    const user = useSelector((state: RootState) => state.auth.account)
-
-    useEffect(() => {
-	axios
-	    .get('/tasks')
-	    .then((response) => {
-		setTasks(response.data.map((item: any) => {
-		    item['deadline'] = dayjs(item['deadline']).format('DD/MM/YYYY')
-		    return item
-		}).filter((item: any) => item.author === user?.user.username))
-		setSelectionModel(response.data.filter((item: any) => item.done === true).map((item: any) => item.id))
-		setIds(response.data.map((item: any) => item.id))
-	    })
-	    .catch((error) => {
-		console.log(error)
-	    })
-    }, [])
 
     const columns: GridColDef[] = [
       { field: 'name', headerName: 'Taskname', width: 200 },
@@ -217,24 +278,21 @@ const TableView = () => {
 // BoardView
 
 
-const BoardView = () => {
-    const [tasks, setTasks] = useState<any>([])
+const BoardView = ({ tasks }: any) => {
     const navigate = useNavigate()
     const user = useSelector((state: RootState) => state.auth.account)
-
-    useEffect(() => {
-	axios
-	    .get('/tasks')
-	    .then((response) => {
-		setTasks(response.data.map((item: any) => {
-		    item['deadline'] = dayjs(item['deadline']).format('DD/MM/YYYY')
-		    return item
-		}).filter((item: any) => item.author === user?.user.username))
-	    })
-	    .catch((error) => {
-		console.log(error)
-	    })
-    }, [])
+    const darkTheme = createTheme({
+      palette: {
+	mode: 'dark',
+	primary: {
+	    dark: "#ffb6c1",
+	    main: "#ffb6c1",
+	},
+	secondary: {
+	    main: '#00e676',
+	}
+      },
+    });
 
     const columns = [
 	{
@@ -261,6 +319,7 @@ const BoardView = () => {
 	// @ts-ignore
 	const color: typeof color_choices = colors[Math.floor(Math.random()*colors.length)]
 	return (
+	<ThemeProvider theme={darkTheme}>
 	    <div className="bg-gray-800 p-3 rounded-xl space-y-3 cursor-pointer" id={task.id} onClick={handleRedirectToTaskView}>
 		<div className="flex flex-row items-center space-x-2">
 		    <ArticleOutlinedIcon className="text-gray-200"/>
@@ -268,10 +327,11 @@ const BoardView = () => {
 		</div>
 		{
 		    task.tags.map((tag: any) => {
-			return <Chip label={tag} className='px-3 font-semibold' color={'secondary'} size='small'/>
+			return <Chip label={tag} className='px-3 font-semibold' color={'primary'} size='small'/>
 		    })
 		}
 	    </div>
+</ThemeProvider>
 	)
     }
 
