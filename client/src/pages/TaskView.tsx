@@ -50,7 +50,7 @@ export const TaskView = () => {
     }
 
     const [date, setDate] = useState<Dayjs | null>(
-	dayjs('2014-08-18T21:11:54'),
+	dayjs('2022-11-27T21:11:54'),
       );
     const handleDateChange = (newValue: Dayjs | null) => {
 	setDate(newValue);
@@ -66,6 +66,9 @@ export const TaskView = () => {
 	status: string,
       ) => {
 	setStatus(status);
+	let tempObject = Object.assign({}, task)
+	tempObject['done'] = (status === 'to-do' ? false : true)
+	setTask(tempObject)
       };
 
     const handleCreate = () => {
@@ -79,7 +82,7 @@ export const TaskView = () => {
 		task,
 	    )
 	    .then((response) => {
-		console.log(response.data)
+	    	navigate('/')
 	    })
 	    .catch((error) => {
 		console.log(error)

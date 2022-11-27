@@ -16,7 +16,7 @@ import authSlice from '../store/slices/auth'
 import {DataGrid, GridColDef, GridSelectionModel} from '@mui/x-data-grid'
 import {ThemeProvider} from '@emotion/react'
 import axios from 'axios'
-import {createTheme} from '@mui/material'
+import {Checkbox, createTheme} from '@mui/material'
 import dayjs from 'dayjs'
 
 
@@ -54,13 +54,20 @@ export const MainWindow = () => {
     const handleRedirectToProfile = () => {
 	navigate(`/profile/${user?.user.username}`)
     }
+    const darkTheme = createTheme({
+      palette: {
+	mode: 'dark',
+      },
+    });
+
+    
 
     return (
 	<div className="p-5 flex flex-col">
 	    <div className='border-b border-gray-800 space-y-7'>
 		<div className="bg-black flex flex-row justify-between items-center">
 		    <div className='flex flex-row items-center space-x-2'>
-			<TaskAltOutlinedIcon className='text-white' fontSize='large'/>
+			<img src={require('../assets/photo1669445820.jpeg')} className='w-10 h-10' alt='Dictionary'/>
 			<h1 className="text-gray-300 text-3xl font-semibold">Tasks</h1>
 		    </div>
 		    <div>
@@ -88,6 +95,7 @@ export const MainWindow = () => {
         aria-controls={open ? 'basic-menu' : undefined}
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined} onClick={handleFilterClick} className={'capitalize hover:bg-gray-900 ' + (filterApplied ? ' text-blue-300 ' : 'text-gray-100')}>Filter</Button>
+			<ThemeProvider theme={darkTheme}>
 			<Menu
 			    id="basic-menu"
 			    anchorEl={anchorEl}
@@ -97,10 +105,7 @@ export const MainWindow = () => {
 			      'aria-labelledby': 'basic-button',
 			    }}
 			  >
-			    <MenuItem onClick={handleClose}>Profile</MenuItem>
-			    <MenuItem onClick={handleClose}>My account</MenuItem>
-			    <MenuItem onClick={handleClose}>Logout</MenuItem>
-			  </Menu>
+			  </Menu></ThemeProvider>
 			<div className='py-1'>
 				<Button onClick={handleNewButtonClick} variant='contained' className={'capitalize text-white'}>New</Button>
 			</div>
@@ -113,7 +118,7 @@ export const MainWindow = () => {
 			    ?
 			    <BoardView/>
 			    :
-			    <TableView/>
+			    <TableView tasks={tasks}/>
 	    }
 	   </div>
 	</div>
@@ -121,7 +126,7 @@ export const MainWindow = () => {
 }
 
 // TableView
-const TableView = () => {
+const TableView = ({ tasks }) => {
     const darkTheme = createTheme({
       palette: {
 	mode: 'dark',
@@ -258,7 +263,7 @@ const BoardView = () => {
 		</div>
 		{
 		    task.tags.map((tag: any) => {
-			return <Chip label={tag} className='px-3 font-semibold' color={color} size='small'/>
+			return <Chip label={tag} className='px-3 font-semibold' color={'secondary'} size='small'/>
 		    })
 		}
 	    </div>
@@ -287,8 +292,8 @@ const BoardView = () => {
     }
 
     return (
-	<div className="p-2">
-	    <div className="flex flex-row space-x-5">
+	<div className="p-3">
+	    <div className="flex flex-row space-x-5 justify-center">
 		{
 		    columns.map((item: any) => renderColumn(item))
 		}

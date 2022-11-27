@@ -19,6 +19,31 @@ export const Profile = () => {
     const user = useSelector((state: RootState) => state.auth.account)
     const navigate = useNavigate()
 
+    const onSelectImageHandler = (event: any) => {
+	    const file = event?.currentTarget.files[0];
+	    const formData = new FormData();
+	    formData.append('avatar', file)
+
+	    const config = {
+		headers: {
+		    "Content-Type":"multipart/form-data" 
+		}
+	    };
+
+	    axios
+		.post(
+		    '/upload-avatar',
+		    formData,
+		    config,
+		)
+		.then((response) => {
+		    console.log(response.data)
+		})
+		.catch((error) => {
+		    console.log(error)
+		})
+	}
+
     const handlePasswordReset = () => {
 	axios
 	    .put(
@@ -35,6 +60,10 @@ export const Profile = () => {
 		} else {
 		    alert('Old password is incorrect')
 		}
+		console.log(response.data)
+	    })
+	    .catch((error) => {
+	    	console.log(error)
 	    })
     }
 
@@ -44,13 +73,13 @@ export const Profile = () => {
 	    <div className="mx-auto w-[700px] divide-y space-y-5 p-10">
 		<div className='space-y-3'>
 		    <h1 className='text-gray-200 text-xl'>Upload Profile image</h1>
-		    <input type="file" name="file"/>
+		    <input type="file" name="avatar" id="avatar" onChange={onSelectImageHandler}/>
 		</div>
 		<div className='space-y-3'>
 		    <h1 className='text-gray-200 pt-2 text-xl'>Change password</h1>
 		    <div className='flex flex-col space-y-2'>
-			<TextField value={oldPass} label='Old password' onChange={(event: any) => setOldPass(event.currentTarget.value)}/>	
-			<TextField value={newPass} label='New password' onChange={(event: any) => setNewPass(event.currentTarget.value)}/>	
+			<TextField value={oldPass} label='Old password' type='password' onChange={(event: any) => setOldPass(event.currentTarget.value)}/>	
+			<TextField value={newPass} label='New password' type='password' onChange={(event: any) => setNewPass(event.currentTarget.value)}/>	
 		    </div>
 		    <Button onClick={handlePasswordReset}>Change</Button>
 		</div>
