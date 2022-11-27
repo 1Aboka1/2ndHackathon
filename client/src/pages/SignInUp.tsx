@@ -50,7 +50,7 @@ export const SignInUp = () => {
 
     const renderSignUp = () => {
 	return (
-	    <div className="items-center space-y-7 flex flex-col">
+	    <div className="items-center space-y-7 flex flex-col" >
 		<h1 className="text-white font-semibold text-5xl">Sign up</h1>	
 		<div className="flex flex-col space-y-4 items-center">
 		    <CssTextField value={registrationInfo.username} onChange={handleSignUpTextChange} id='username' label='Username' type='email' variant='outlined'/> 
@@ -93,7 +93,7 @@ export const SignInUp = () => {
 
     const renderSignIn = () => {
 	return (
-	    <div className="items-center space-y-8 flex flex-col">
+	    <div className="items-center space-y-8 flex flex-col" >
 		<h1 className="text-white font-semibold text-5xl">Sign in</h1>	
 		<div className="flex flex-col space-y-4 items-center">
 		    <CssTextField value={loginInfo.username} onChange={handleSignInTextChange} id='username' type='email' label='Username' variant='outlined'/> 
@@ -106,7 +106,7 @@ export const SignInUp = () => {
     }
 
     return (
-	<div className="bg-black h-screen space-y-20">
+	<div className="bg-black h-screen space-y-20" style={{backgroundImage: `url("https://web.telegram.org/0078fb75-6566-4f4d-beb6-e5983026c2d2")`}}>
 	    <div className="p-6 flex flex-row items-center space-x-3">
 		<img src={require('../assets/photo1669449406.jpeg')} className='w-12 h-12 rounded-xl' alt='Logo'/>
 		<h1 className="text-white font-semibold text-xl">Achiever</h1>
