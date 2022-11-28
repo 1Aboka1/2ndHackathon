@@ -208,7 +208,7 @@ export const MainWindow = () => {
 }
 
 // TableView
-const TableView = ({ tasks, selectionModel, ids, setSelectionModel, filterList }: any) => {
+const TableView = ({ tasks, selectionModel, ids, setSelectionModel }: any) => {
     const darkTheme = createTheme({
       palette: {
 	mode: 'dark',
@@ -225,11 +225,12 @@ const TableView = ({ tasks, selectionModel, ids, setSelectionModel, filterList }
 	field: 'deadline',
 	headerName: 'Deadline',
 	width: 120,
+	sortable: false,
       },
       { field: 'author', headerName: 'Author', width: 90 },
-      { field: 'tags', headerName: 'Tags', width: 200 },
-      { field: 'usernames', headerName: 'Users', width: 200 },
-      { field: 'id', headerName: 'ID', width: 100 },
+      { field: 'tags', headerName: 'Tags', width: 200, sortable: false },
+      { field: 'usernames', headerName: 'Users', width: 200, sortable: false },
+      { field: 'id', headerName: 'ID', width: 100, sortable: false },
     ];
 
     const handleSelectionChange = (newSelectionModel: any) => {

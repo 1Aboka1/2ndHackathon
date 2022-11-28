@@ -4,11 +4,11 @@
   },
   {
     "id": "SygpXaxwo",
-    "name": "Hit the Gym",
     "usernames": [
       "Talant",
       "Eraly"
     ],
+    "name": "Hit the Gym",
     "tags": [
       "Self-improvement"
     ],
@@ -26,21 +26,21 @@
       "Homework",
       "Kazakh"
     ],
-    "done": false,
+    "done": true,
     "deadline": "2022-12-12T18:00:00.000Z",
     "author": "Abulkhair"
   },
   {
     "id": "SymbVTlws",
-    "name": "SAT Preparation",
     "usernames": [
       "Talant"
     ],
+    "name": "SAT Preparation",
     "tags": [
       "SAT",
       "Exam"
     ],
-    "done": true,
+    "done": false,
     "deadline": "2022-10-31T18:00:00.000Z",
     "author": "Abulkhair"
   }
