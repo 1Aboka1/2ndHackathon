@@ -38,6 +38,7 @@ export const TaskView = () => {
 	    .get(`/tasks/${taskId}`)
 	    .then((response) => {
 		setTask(response.data)
+		setDate(dayjs(response.data.deadline))
 	    })
     }, [taskId])
 

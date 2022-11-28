@@ -1,12 +1,26 @@
 import {useState} from "react"
 import { styled } from '@mui/material/styles'
 import TextField from '@mui/material/TextField'
-import {Button} from "@mui/material"
+import {Button, createTheme} from "@mui/material"
 import axios from "axios"
 import store from "../store"
 import { useDispatch } from 'react-redux'
 import authSlice from "../store/slices/auth"
 import { useNavigate } from "react-router-dom"
+import {ThemeProvider} from "@emotion/react"
+
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+    primary: {
+	dark: "#FF69B4",
+	main: "#FF69B4",
+    },
+    secondary: {
+	main: '#00e676',
+    }
+  },
+});
 
 export const SignInUp = () => {
     const [signType, setSignType] = useState('signIn')
@@ -106,6 +120,7 @@ export const SignInUp = () => {
     }
 
     return (
+	<ThemeProvider theme={darkTheme}>
 	<div className="bg-black h-screen space-y-20" style={{backgroundImage: `url("https://web.telegram.org/0078fb75-6566-4f4d-beb6-e5983026c2d2")`}}>
 	    <div className="p-6 flex flex-row items-center space-x-3">
 		<img src={require('../assets/photo1669449406.jpeg')} className='w-12 h-12 rounded-xl' alt='Logo'/>
@@ -121,6 +136,7 @@ export const SignInUp = () => {
 		}
 	    </div>
 	</div>
+	</ThemeProvider>
     )
 }
 

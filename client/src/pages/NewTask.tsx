@@ -18,6 +18,19 @@ import {RootState} from "../store"
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import {useNavigate} from "react-router-dom"
 
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+    primary: {
+	dark: "#FF69B4",
+	main: "#FF69B4",
+    },
+    secondary: {
+	main: '#00e676',
+    }
+  },
+});
+
 export const NewTask = () => {
     const user: any = useSelector((state: RootState) => state.auth.account)
     const navigate = useNavigate()
@@ -71,12 +84,6 @@ export const NewTask = () => {
 		console.log(error)
 	    })
     }
-
-    const darkTheme = createTheme({
-      palette: {
-	mode: 'dark',
-      },
-    });
 
     let users = task.usernames.map((item: any) => ({
 	label: item,
